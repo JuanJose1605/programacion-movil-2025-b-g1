@@ -1,0 +1,97 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum EstadoUsuario {
+  activo
+  inactivo
+}
+
+enum EstadoPedido {
+  pendiente
+  entregado
+}
+
+model Roles {
+  id_rol   Int       @id @default(autoincrement())
+  nombre   String
+  usuarios Usuarios[]
+}
+
+model Usuarios {
+  id_usuario      Int            @id @default(autoincrement())
+  id_rol          Int?
+  nombres         String
+  apellidos       String?
+  username        String         @unique
+  password        String
+  estado          EstadoUsuario  @default(activo)
+  fecha_registro  DateTime       @default(now())
+
+  rol             Roles?         @relation(fields: [id_rol], references: [id_rol])
+  pedidos         Pedidos[]      @relation("PedidosUsuario")
+}
+
+model Categorias {
+  id_categoria Int         @id @default(autoincrement())
+  nombre       String
+  descripcion  String?
+
+  productos    Productos[]
+}
+
+model Productos {
+  id_producto   Int           @id @default(autoincrement())
+  id_categoria  Int?
+  nombre        String
+  descripcion   String?
+  precio        Decimal
+  estado        EstadoUsuario  @default(activo)
+
+  categoria     Categorias?     @relation(fields: [id_categoria], references: [id_categoria])
+  inventario    Inventario[]
+  detalles      PedidoDetalle[]
+}
+
+model Inventario {
+  id_inventario Int      @id @default(autoincrement())
+  id_producto   Int
+  stock         Int       @default(0)
+
+  producto      Productos @relation(fields: [id_producto], references: [id_producto])
+}
+
+model Pedidos {
+  id_pedido       Int           @id @default(autoincrement())
+  id_usuario      Int?
+  fecha_pedido    DateTime      @default(now())
+  total           Decimal?
+  direccion_envio String?
+  estado          EstadoPedido  @default(pendiente)
+
+  usuario         Usuarios?     @relation("PedidosUsuario", fields: [id_usuario], references: [id_usuario])
+  detalles        PedidoDetalle[]
+}
+
+model PedidoDetalle {
+  id_detalle   Int       @id @default(autoincrement())
+  id_pedido    Int
+  id_producto  Int
+  cantidad     Int
+  subtotal     Decimal?
+
+  pedido       Pedidos   @relation(fields: [id_pedido], references: [id_pedido])
+  producto     Productos @relation(fields: [id_producto], references: [id_producto])
+}
