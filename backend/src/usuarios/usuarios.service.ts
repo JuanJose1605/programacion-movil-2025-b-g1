@@ -47,13 +47,13 @@ export class UsuariosService extends PrismaClient implements OnModuleInit {
     return this.usuarios.findMany();
   }
 
-  findOne(id: number) {
+  findOne(id: string) {
     return this.usuarios.findUnique({
       where: { id_usuario: id },
     });
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return this.usuarios.delete({
       where: { id_usuario: id },
     });

@@ -24,12 +24,12 @@ async login(@Body() body: { username: string; password: string }) {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.usuariosService.findOne(+id);
+    return this.usuariosService.findOne(id);
   }
 
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.usuariosService.remove(+id);
+    return this.usuariosService.remove(id);
   }
 }

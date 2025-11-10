@@ -1,0 +1,57 @@
+:root {
+  /* 🎨 Fondo principal de toda la app */
+  --ion-background-color: #ffffff;
+  --ion-text-color: #000000;
+
+  /* 🎯 Personalización de la barra de tabs */
+  --ion-tab-bar-background: #e60023;    /* rojo principal */
+  --ion-tab-bar-border-color: transparent;
+  --ion-tab-bar-color: #ffffff;         /* ícono/texto inactivo */
+  --ion-tab-bar-color-selected: #ffe600;/* ícono/texto activo (amarillo) */
+
+  /* 🔘 Colores base para botones y componentes */
+  --ion-color-primary: #e60023;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-secondary: #ffe600;
+  --ion-color-secondary-contrast: #000000;
+  --ion-color-medium: #c4c4c4;
+  --ion-color-light: #f5f5f5;
+}
+
+/* 🧱 Fondo general de las páginas (dentro del ion-router-outlet) */
+ion-router-outlet,
+ion-router-outlet > *,
+ion-page,
+ion-content {
+  --background: #ffffff;
+  background: #ffffff !important;
+}
+
+/* 💡 Tab bar con color personalizado (para asegurarlo en modo md o ios) */
+ion-tab-bar,
+ion-tab-bar.md,
+ion-tab-bar.ios {
+  --background: #24660a;
+  --color: #ffffff;
+  --color-selected: #c41b1b;
+  --border-color: transparent;
+}
+
+/* 🧩 Íconos del tab bar (tamaño y espaciado opcional) */
+ion-tab-button {
+  font-size: 13px;
+  --padding-top: 6px;
+  --padding-bottom: 4px;
+}
+
+ion-tab-button ion-icon {
+  font-size: 22px;
+}
+
+/* 📱 Ajustes generales del layout */
+html,
+body,
+ion-app {
+  background: #ffffff !important;
+  color: #000000;
+}

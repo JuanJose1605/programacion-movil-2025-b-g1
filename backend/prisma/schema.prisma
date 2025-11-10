@@ -24,24 +24,17 @@ enum EstadoPedido {
   entregado
 }
 
-model Roles {
-  id_rol   Int       @id @default(autoincrement())
-  nombre   String
-  usuarios Usuarios[]
-}
+
 
 model Usuarios {
-  id_usuario      Int            @id @default(autoincrement())
-  id_rol          Int?
+  id_usuario      String            @id 
   nombres         String
   apellidos       String?
   username        String         @unique
   password        String
-  estado          EstadoUsuario  @default(activo)
   fecha_registro  DateTime       @default(now())
 
-  rol             Roles?         @relation(fields: [id_rol], references: [id_rol])
-  pedidos         Pedidos[]      @relation("PedidosUsuario")
+  pedidos         Pedidos[]      
 }
 
 model Categorias {
@@ -75,13 +68,13 @@ model Inventario {
 
 model Pedidos {
   id_pedido       Int           @id @default(autoincrement())
-  id_usuario      Int?
+  id_usuario      String
   fecha_pedido    DateTime      @default(now())
   total           Decimal?
   direccion_envio String?
   estado          EstadoPedido  @default(pendiente)
 
-  usuario         Usuarios?     @relation("PedidosUsuario", fields: [id_usuario], references: [id_usuario])
+  usuario         Usuarios?     @relation(fields: [id_usuario], references: [id_usuario])
   detalles        PedidoDetalle[]
 }
 

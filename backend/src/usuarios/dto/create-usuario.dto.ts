@@ -1,14 +1,14 @@
 import { IsNumber, IsString } from "class-validator";
 
 export class CreateUsuarioDto {
-    @IsNumber()
-    id_rol: number;
+    @IsString()
+    id_usuario: string;
 
     @IsString()
     nombres: string;
 
     @IsString()
-    apellidos?: string;
+    apellidos: string;
 
     @IsString()
     username: string;
