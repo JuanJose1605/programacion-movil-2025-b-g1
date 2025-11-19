@@ -1,0 +1,57 @@
+.profile-page {
+  min-height: 100vh;
+  box-sizing: border-box;
+  background-color: #ffffff;
+  padding: 16px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    -apple-system, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Título "Mi cuenta" pequeñito arriba a la izquierda */
+.profile-page h3 {
+  margin: 0 0 12px 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: #000;
+}
+
+/* Contenedor de los datos del usuario tipo “lista” */
+.profile-page > p,
+.profile-page > div > p {
+  margin: 0;
+  padding: 10px 4px;
+  font-size: 13px;
+  color: #000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 0.5px solid #f0f0f0;
+}
+
+/* Label (lo que está en <b>) a la izquierda */
+.profile-page p b {
+  font-weight: 500;
+  color: #000;
+}
+
+/* Valor a la derecha, un poquito más gris para que parezca placeholder */
+.profile-page p span,
+.profile-page p {
+  color: #777;
+}
+
+/* Opcional: si luego le agregas un botón “Salir” */
+.profile-logout-btn {
+  width: 100%;
+  margin-top: 32px;
+  padding: 12px 0;
+  border: none;
+  border-radius: 6px;
+  background-color: #000;
+  color: #fff;
+  font-size: 14px;
+  text-align: center;
+}
+.profile-logout-btn:focus {
+  outline: none;
+}

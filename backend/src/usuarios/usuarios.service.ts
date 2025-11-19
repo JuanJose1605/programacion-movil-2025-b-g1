@@ -14,14 +14,36 @@ export class UsuariosService extends PrismaClient implements OnModuleInit {
   }
 
   async create(createUsuarioDto: CreateUsuarioDto) {
-    const passBy = await bcrypt.hash(createUsuarioDto.password, 10);
-    return this.usuarios.create({
-      data: {
-        ...createUsuarioDto,
-        password: passBy
-      },
-    });
+  const { id_usuario, username, password } = createUsuarioDto;
+
+  // 🔍 1. Validar si existe un usuario con ese id_usuario o username
+  const usuarioExiste = await this.usuarios.findFirst({
+    where: {
+      OR: [
+        { id_usuario },
+        { username }
+      ]
+    }
+  });
+
+  if (usuarioExiste) {
+    throw new UnauthorizedException(
+      'Ya existe un usuario con ese documento o nombre de usuario'
+    );
   }
+
+  // 🔐 2. Hashear la contraseña
+  const passBy = await bcrypt.hash(password, 10);
+
+  // 🟢 3. Crear usuario con contraseña encriptada
+  return this.usuarios.create({
+    data: {
+      ...createUsuarioDto,
+      password: passBy
+    },
+  });
+}
+
 
   async login(username: string, password: string) {
     const usuario = await this.usuarios.findUnique({ where: { username } });

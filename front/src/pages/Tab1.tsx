@@ -1,39 +1,90 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
-import './Tab1.css';
-import { useHistory } from 'react-router';
+import {
+  IonPage,
+  IonContent,
+} from "@ionic/react";
+import "./Tab1.css";
+import { useHistory } from "react-router";
+import { useAuthStore } from "../store/useAuth.store";
 
 const Tab1: React.FC = () => {
   const history = useHistory();
+  const logoutStore = useAuthStore((state) => state.logout);
+  const irADetalle = (id: number) => {
+    history.push(`/producto/${id}`);
+  };
+  const productos = [
+  {
+    id: 2,
+    nombre: "Carne",
+    imagenUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1NcKr7MJ_RYuqqiXmQmY0Jjzw_vOkfzhJ8Q&s",
+  },
+  {
+    id: 3,
+    nombre: "Leche",
+    imagenUrl: "https://media.istockphoto.com/id/1989575540/es/vector/milk-illustration.jpg?s=612x612&w=0&k=20&c=51u0AF20IZ-amvQsn79nE170-gJEv8CLttHq7AhvuKo=",
+  }
+  
+];
 
-  // 🔹 Funciones para redirigir
   const goInventario = () => history.push("/admin/inventario");
-  const goPedidos = () => history.push("/admin/pedidos");
-  const goAgregar = () => history.push("/admin/agregar");
+  const goPedidos =   () => history.push("/admin/pedidos");
+  const goAgregar =   () => history.push("/admin/agregar");
+
+  const handleLogout = () => {
+    // 1️⃣ Limpia estado global + localStorage + axios
+    logoutStore();
+    // 2️⃣ Navega al login
+    history.replace("/login");
+  };
 
   return (
-    <div className="admin-container">
-      <img src="../f1b28a798154152dd8d9eb0ba94b14a6285da1ae.png" alt="Siwventas" className="admin-logo" />
-      <img src="../Capture.PNG" alt="banner" className="admin-banner" />
-
-      <h3 className="section-title">Opciones</h3>
-      <div className="admin-buttons">
-        <div className="admin-btn" onClick={goInventario}>
-          <img src="../f75e4ce9c0f4b0a698516a355b080a48e2f7b98e.png" alt="Inventario" />
-          
-        </div>
-
-        <div className="admin-btn" onClick={goPedidos}>
-          <img src="../5a551eff6324757a584fd8faac9eb0442d99a04f.png" alt="Pedido" />
-          
-        </div>
-
-        <div className="admin-btn" onClick={goAgregar}>
-          <img src="../954e8b4a4e92060d1f8bc4bf3bd7d8e838685a63.png" alt="Agregar producto" />
-         
-        </div>
+    <IonPage>
+      <IonContent fullscreen>
+        <div className="admin-container">
+          <img
+            src="../f1b28a798154152dd8d9eb0ba94b14a6285da1ae.png"
+            alt="Siwventas"
+            className="admin-logo"
+          />
+          <img
+            src="../Gemini_Generated_Image_nr0jranr0jranr0j.png"
+            alt="banner"
+            className="admin-banner"
+          />
+          <div>
+            <h2 className="inv-title">lo Popuiar</h2>
+             <div className="productos-grid">
+        {productos.map((p) => (
+          <div key={p.id} className="producto-card" onClick={() => irADetalle(p.id)}>
+            <div className="producto-img-wrapper">
+              <img src={p.imagenUrl} alt={p.nombre} />
+            </div>
+            <div className="producto-info">
+              <p className="producto-nombre">{p.nombre}</p>
+            </div>
+          </div>
+        ))}
       </div>
-    </div>
+          </div>
+
+          
+
+          <div>
+            <button
+              className="inv-update-btn"
+              onClick={handleLogout}
+            >
+              cerrar sesión
+            </button>
+          </div>
+          <img
+              className="bottom-illustration"
+              src="../590de56a513e808d8dc8b85dc50e08872624e834.png"
+              alt="Carrito"
+            />
+        </div>
+      </IonContent>
+    </IonPage>
   );
 };
 

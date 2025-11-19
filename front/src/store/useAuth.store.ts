@@ -30,8 +30,8 @@ const ADMIN_USERNAME = "admin";
 const ADMIN_PASSWORD = "admin123";
 
 // rutas de panel
-const ADMIN_ROUTE = "/tab1";
-const CLIENT_ROUTE = "/tab2";
+const ADMIN_ROUTE = "/homeAdmin";
+const CLIENT_ROUTE = "/tab1";
 
 export const useAuthStore = create<AuthState>((set) => ({
   token: null,
@@ -53,6 +53,9 @@ export const useAuthStore = create<AuthState>((set) => ({
 
       // Si el backend respondió OK, guardamos token
       localStorage.setItem("token", data.token);
+
+      // ⬇️ IMPORTANTE: adjuntamos el token a axios para futuras peticiones
+      axiosClient.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
 
       // Determinar admin SOLO por las credenciales escritas
       const isAdmin =
@@ -92,6 +95,10 @@ export const useAuthStore = create<AuthState>((set) => ({
   logout: () => {
     localStorage.removeItem("token");
     localStorage.removeItem("isAdmin");
+
+    // ⬇️ Limpiar header Authorization de axios
+    delete axiosClient.defaults.headers.common["Authorization"];
+
     set({
       token: null,
       mensaje: null,
@@ -105,12 +112,17 @@ export const useAuthStore = create<AuthState>((set) => ({
   hydrate: () => {
     const token = localStorage.getItem("token");
     const isAdmin = localStorage.getItem("isAdmin") === "1";
+
     if (token) {
+      // ⬇️ Restaurar el token en el estado
       set({
         token,
         isAuthenticated: true,
         isAdmin,
       });
+
+      // ⬇️ Volver a adjuntar el token a axios al recargar la página
+      axiosClient.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     }
   },
 }));

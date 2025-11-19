@@ -37,24 +37,17 @@ model Usuarios {
   pedidos         Pedidos[]      
 }
 
-model Categorias {
-  id_categoria Int         @id @default(autoincrement())
-  nombre       String
-  descripcion  String?
 
-  productos    Productos[]
-}
 
 model Productos {
   id_producto   Int           @id @default(autoincrement())
-  id_categoria  Int?
   nombre        String
   descripcion   String?
-  precio        Decimal
+  precio        String
+  stock         String   
+  imagen_url    String?   
   estado        EstadoUsuario  @default(activo)
 
-  categoria     Categorias?     @relation(fields: [id_categoria], references: [id_categoria])
-  inventario    Inventario[]
   detalles      PedidoDetalle[]
 }
 
@@ -63,7 +56,6 @@ model Inventario {
   id_producto   Int
   stock         Int       @default(0)
 
-  producto      Productos @relation(fields: [id_producto], references: [id_producto])
 }
 
 model Pedidos {
@@ -74,9 +66,11 @@ model Pedidos {
   direccion_envio String?
   estado          EstadoPedido  @default(pendiente)
 
+  carrito         Json?         // 👈 aqui guardamos todo el contenido del carrito
+
   usuario         Usuarios?     @relation(fields: [id_usuario], references: [id_usuario])
-  detalles        PedidoDetalle[]
 }
+
 
 model PedidoDetalle {
   id_detalle   Int       @id @default(autoincrement())
@@ -85,6 +79,5 @@ model PedidoDetalle {
   cantidad     Int
   subtotal     Decimal?
 
-  pedido       Pedidos   @relation(fields: [id_pedido], references: [id_pedido])
   producto     Productos @relation(fields: [id_producto], references: [id_producto])
 }

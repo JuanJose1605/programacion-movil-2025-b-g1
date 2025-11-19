@@ -1,26 +1,45 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./login.css";
 import { useHistory } from "react-router";
 import { useAuthStore } from "../../store/useAuth.store";
 
+const Login: React.FC = () => {
+  const {
+    login,
+    loading,
+    error,
+    mensaje,
+    isAuthenticated,
+    hydrate,
+    isAdmin,
+  } = useAuthStore();
 
-
-const Login: React.FC = ({ }) => {
- const { login, loading, error, mensaje, isAuthenticated } = useAuthStore();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const history = useHistory();
 
+  // 🔹 Al montar el componente, intentamos restaurar sesión
+  useEffect(() => {
+    hydrate();
+  }, [hydrate]);
+
+  // 🔹 Si ya está autenticado (por login o por hydrate), lo mandamos a su panel
+  useEffect(() => {
+    if (isAuthenticated) {
+      history.push(isAdmin ? "/homeAdmin" : "/tab1");
+    }
+  }, [isAuthenticated, isAdmin, history]);
+
   const handleRegisterClick = () => {
-    history.push("/registro"); // 🔹 Navegar al registro
+    history.push("/registro");
   };
-  
+
   const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  const { ok, panelPath } = await login(username, password);
-  if (!ok) return; // aquí puedes mostrar el error del store
-  history.push(panelPath); // /panel-admin o /panel-cliente
-};
+    e.preventDefault();
+    const { ok, panelPath } = await login(username, password);
+    if (!ok) return;
+    history.push(panelPath); // /tab1 o /tab2
+  };
 
   return (
     <div className="login-bg">
@@ -38,6 +57,12 @@ const Login: React.FC = ({ }) => {
           <p className="subtitle">
             Ingresa tu usuario y contraseña para ingresar
           </p>
+
+          {/* 🔹 Mensaje de éxito del backend (opcional) */}
+          {mensaje && <p className="success-msg">{mensaje}</p>}
+
+          {/* 🔹 Error del store */}
+          {error && <p className="error-msg">{error}</p>}
 
           {/* Inputs */}
           <label className="sr-only" htmlFor="usuario">
@@ -95,13 +120,6 @@ const Login: React.FC = ({ }) => {
             </a>
           </p>
         </form>
-
-        {/* Imagen inferior (frutas) */}
-        {/* <img
-          className="bottom-illustration"
-          src="../590de56a513e808d8dc8b85dc50e08872624e834.png"
-          alt="ilustración mercado"
-        /> */}
       </div>
     </div>
   );

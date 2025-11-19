@@ -31,7 +31,7 @@ ion-content {
 ion-tab-bar,
 ion-tab-bar.md,
 ion-tab-bar.ios {
-  --background: #24660a;
+  --background: #000000;
   --color: #ffffff;
   --color-selected: #c41b1b;
   --border-color: transparent;

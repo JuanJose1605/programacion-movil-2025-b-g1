@@ -1,8 +1,7 @@
 import { IsNumber, IsString } from "class-validator";
 
 export class CreateProductoDto {
-    @IsNumber()
-    id_categoria: number;
+
 
     @IsString()
     nombre: string;
@@ -10,7 +9,10 @@ export class CreateProductoDto {
     @IsString()
     descripcion: string;    
 
-    @IsNumber()
-    precio: number;
+    @IsString()
+    precio: string;
+
+    @IsString()
+    stock: string;
 
 }

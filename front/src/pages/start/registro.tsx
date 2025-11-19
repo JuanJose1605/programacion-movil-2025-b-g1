@@ -5,21 +5,22 @@ import { InputChangeEventDetail, InputCustomEvent, IonIcon } from "@ionic/react"
 import { chevronBackOutline } from "ionicons/icons";
 import { useUserStore } from "../../store/user.store";
 
-
+const initialFormData = {
+  id_usuario: "",
+  nombres: "",
+  apellidos: "",
+  username: "",
+  password: "",
+};
 const Registro: React.FC = () => {
   const { setUser } = useUserStore();
+  const { error, clearError } = useUserStore();
   const history = useHistory();
   const handleGoBack = () => {
     history.goBack(); // 🔹 vuelve a la ruta anterior
   };
 
-  const [formData, setFormData] = useState({
-    id_usuario: "",
-    nombres: "",
-    apellidos: "",
-    username: "",
-    password: "",
-  });
+  const [formData, setFormData] = useState(initialFormData);
 
   const handleChange =
     (key: keyof typeof formData) =>
@@ -29,13 +30,37 @@ const Registro: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (formData.id_usuario.length < 6) {
+      alert("El documento debe tener mínimo 6 números.");
+      return;
+    }
+
+    // 🟡 Validación: username y password no pueden ir vacíos
+    if (!formData.nombres.trim()) {
+      alert("El nombre es obligatorio.");
+      return;
+    }
+    if (!formData.apellidos.trim()) {
+      alert("El apellido es obligatorio.");
+      return;
+    }
+    if (!formData.username.trim()) {
+      alert("El nombre de usuario es obligatorio.");
+      return;
+    }
+
+    if (!formData.password.trim()) {
+      alert("La contraseña es obligatoria.");
+      return;
+    }
 
     try {
       await setUser(formData);
       alert("usuario creado con éxito");
+      setFormData(initialFormData);
       // puedes redirigir o limpiar el formulario si quieres
-    } catch (error) {
-      alert("Error al crear el usuario");
+    } catch (err: any) {
+      alert(err.message);
     }
   };
 
@@ -105,7 +130,7 @@ const Registro: React.FC = () => {
             onChange={handleChange("password")}
           />
 
-          <button className="btn btn-primary"  type="submit">
+          <button className="btn btn-primary" type="submit">
             Crear Usuario
           </button>
 

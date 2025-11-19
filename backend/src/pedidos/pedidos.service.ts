@@ -11,16 +11,25 @@ export class PedidosService extends PrismaClient implements OnModuleInit {
   create(createPedidoDto: CreatePedidoDto) {
     return this.pedidos.create({
       data: createPedidoDto,
+       
     })
   }
 
   findAll() {
-    return this.pedidos.findMany();
+    return this.pedidos.findMany({
+      include: {
+        usuario: true, // 🔹 aquí traemos los datos del usuario
+      },
+      orderBy: { fecha_pedido: 'desc' },
+    });
   }
 
   findOne(id: number) {
     return this.pedidos.findUnique({
       where: { id_pedido: id },
+      include: {
+        usuario: true, // 🔹 aquí traemos los datos del usuario
+      },
     });
   }
 
